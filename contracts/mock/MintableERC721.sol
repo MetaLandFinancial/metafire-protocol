@@ -3,12 +3,13 @@ pragma solidity 0.8.4;
 
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
  * @title MintableERC721
  * @dev ERC721 minting logic
  */
-contract MintableERC721 is ERC721Enumerable {
+contract MintableERC721 is ERC721Enumerable, Ownable {
   string public baseURI;
   mapping(address => uint256) public mintCounts;
 
@@ -21,8 +22,9 @@ contract MintableERC721 is ERC721Enumerable {
    * @param tokenId The id of tokens to mint.
    * @return A boolean that indicates if the operation was successful.
    */
-  function mint(uint256 tokenId) public returns (bool) {
+  function mint(uint256 tokenId) external payable returns (bool) {
     require(tokenId < 10000, "exceed mint limit");
+    require(msg.value == 0.01 ether, "mint price mismatch");
 
     mintCounts[_msgSender()] += 1;
     require(mintCounts[_msgSender()] <= 10, "exceed mint limit");
@@ -35,7 +37,13 @@ contract MintableERC721 is ERC721Enumerable {
     return baseURI;
   }
 
-  function setBaseURI(string memory baseURI_) public {
+  function setBaseURI(string memory baseURI_) external onlyOwner {
     baseURI = baseURI_;
+  }
+
+  function withdraw(uint256 value) external onlyOwner {
+    require(address(this).balance >= value, "not enough fund");
+    (bool sent,) = owner().call{value: value}("");
+    require(sent, "failed to send Ether");
   }
 }
