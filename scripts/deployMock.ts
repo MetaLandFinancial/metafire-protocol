@@ -7,6 +7,10 @@ async function main() {
     const mockERC721Test = await MockERC721Test.deploy(`Test${i + 1}`, `T${i + 1}`);
     await mockERC721Test.deployed();
     console.log(`Test ${i + 1} deployed:`, mockERC721Test.address);
+    for (let j = 0; j < 3; j++) {
+      const tx = await mockERC721Test.mint({ value: ethers.utils.parseEther('0.01') });
+      await tx.wait();
+    }
   }
 }
 
