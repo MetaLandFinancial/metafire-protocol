@@ -14,6 +14,13 @@ async function main() {
   }
 }
 
+// Goerli deployments
+// Test 1 deployed: 0xbBB0C17F7df232FB99CFc21b3951Bd9EEFA4Ec6c
+// Test 2 deployed: 0x69A3a05A9017E84629473A7e1fcB19A14d656864
+// Test 3 deployed: 0xC609480860327e61E0508A088E8e9e98be693659
+// Test 4 deployed: 0x09506E80052df22F11E22889a2fFb4F8F0b202f7
+// Test 5 deployed: 0x94085Dd920D16E134D351Cd7cfBcb3b3306EcacD
+
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
